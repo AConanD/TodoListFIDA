@@ -52,7 +52,17 @@ function fillTodoTable() {
                 td4.textContent = todos[i].done;
                 tr.appendChild(td4);
                 let td5 = document.createElement('td');
-                td5.textContent = "actions-Dummy";
+
+                var btn = document.createElement('input');
+                btn.type = "button";
+                btn.className = "btn";
+                btn.value = "delete";
+                btn.onclick = (function() {
+                    return function () {
+                        deleteEntry(todos[i].id);
+                    }
+                })(todos[i].id);
+                td5.appendChild(btn);
                 tr.appendChild(td5);
 
                 table.appendChild(tr);
@@ -62,5 +72,33 @@ function fillTodoTable() {
         .catch(error => {
             console.error('There was a problem with the fetch operation:', error);
         });
+}
 
+function deleteEntry(id) {
+    console.log("Deleting Entry with ID:", id);
+
+    const requestOptions = {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json',
+        }
+    };
+
+    fetch("http://localhost:8080/todos/" + id, requestOptions)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            outputElement.textContent = JSON.stringify(data, null, 2);
+        })
+        .catch(error => {
+            console.error
+
+            ('Error:', error);
+        });
+    //TODO: Page-Reload
+    //location.reload();
 }

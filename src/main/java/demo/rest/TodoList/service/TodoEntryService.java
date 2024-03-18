@@ -36,8 +36,9 @@ public class TodoEntryService {
         }
     }
 
-    public void deleteById(Long id) {
-        todoEntryDao.deleteById(id);
+    public void deleteById(String id) {
+        //TODO: catch non-Longs
+        todoEntryDao.deleteById(Long.parseLong(id));
     }
 
     public TodoEntry create(CreateTodoEntryRequest request) {
